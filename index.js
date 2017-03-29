@@ -69,7 +69,7 @@ class LightifyPlatform {
     let self = this;
     self.getDevices().then((devices) => {
       let accessories = _.map(devices, (device) => {
-        device.name = device.name || device.id;
+        device.name = device.name || `${device.id}`;
         if (lightify.isPlug(device.type)) {
           return new LightifyPlug(device.name, UUIDGen.generate(device.name), device, device.mac, self.getLightify(), self);
         } else if (lightify.isLight(device.type)) {
@@ -141,7 +141,7 @@ class LightifyPlug {
     let self = this;
     this.platform.getDevices().then((data) => {
       let device = _.findWhere(data, {
-        "name": self.name
+        "mac": self.mac
       });
       self.update.bind(self)(device);
       callback(null, device.online && device.status);
